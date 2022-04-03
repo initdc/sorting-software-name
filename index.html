@@ -1,0 +1,114 @@
+<h1>Sorting software name when you build</h1>
+<p>To solve formatting problem when writing scripts</p>
+
+<label
+  >INPUT:
+  <br />
+  <textarea id="cmd" rows="10" cols="80"></textarea>
+</label>
+<br />
+
+<label>
+  symbol at ends
+  <input id="symbol" value="\" />
+</label>
+<br />
+<br />
+
+<label>
+  new line less than
+  <input id="byChar" type="number" value="80" /> chars
+</label>
+<button onclick="pChar()">sort</button>
+<br />
+
+<label>
+  new line every
+  <input id="byName" type="number" value="5" /> names
+</label>
+<button onclick="pName()">sort</button>
+<br />
+<br />
+
+<label>
+  error:
+  <button onclick="clearnLog()">clean</button>
+  <pre id="error" style="color: red"></pre>
+</label>
+
+<label
+  >result:
+  <pre id="result"></pre>
+</label>
+<script>
+  const filterMap = ["", "\\", "-"];
+  const error = document.getElementById("error");
+  const result = document.getElementById("result");
+
+  function clearnLog() {
+    error.textContent = "";
+  }
+
+  function sortCMD() {
+    let cmd = document.getElementById("cmd").value;
+    cmd = cmd.trim();
+
+    const cmdArray = cmd.replaceAll("\n", " ").split(" ");
+    const cmdResult = cmdArray.filter((i) => filterMap.indexOf(i) === -1);
+    cmdResult.sort();
+
+    return cmdResult;
+  }
+
+  function pChar() {
+    const symbol = document.getElementById("symbol").value;
+    const byChar = document.getElementById("byChar").value;
+    const sortResult = sortCMD();
+    const sortLength = sortResult.length;
+
+    let wrapper = "";
+    let line = "";
+
+    for (let i = 0; i < sortLength; i++) {
+      if (sortResult[i].length > byChar) {
+        let errorMsg = `${sortResult[i]} is longger than ${byChar}\n`;
+        error.textContent += errorMsg;
+        console.error(errorMsg);
+
+        wrapper += sortResult[i] + " " + symbol + "\n";
+        continue;
+      }
+      let temp = line + sortResult[i];
+      if (temp.length > byChar) {
+        wrapper += line + " " + symbol + "\n";
+        line = "";
+      }
+      line += sortResult[i] + " ";
+    }
+
+    if (line) {
+      wrapper += line + " " + symbol + "\n";
+    }
+
+    result.textContent = wrapper;
+  }
+
+  function pName() {
+    let symbol = document.getElementById("symbol").value;
+    let byName = document.getElementById("byName").value;
+
+    const sortResult = sortCMD();
+    const sortLength = sortResult.length;
+
+    let wrapper = "";
+
+    for (let i = 0; i < sortLength; i++) {
+      wrapper += sortResult[i] + " ";
+      if ((i + 1) % byName === 0) {
+        wrapper += symbol + "\n";
+      }
+    }
+
+    result.textContent = wrapper;
+  }
+</script>
