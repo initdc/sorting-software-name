@@ -54,7 +54,13 @@
     cmd = cmd.trim();
 
     const cmdArray = cmd.replaceAll("\n", " ").split(" ");
-    const cmdResult = cmdArray.filter((i) => filterMap.indexOf(i) === -1);
+
+    // filter duplicate items
+    const cmdSet = new Set(cmdArray);
+
+    const cmdResult = Array.from(cmdSet).filter(
+      (i) => filterMap.indexOf(i) === -1
+    );
     cmdResult.sort();
 
     return cmdResult;
