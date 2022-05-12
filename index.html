@@ -41,7 +41,8 @@
   <pre id="result"></pre>
 </label>
 <script>
-  const filterMap = ["", "\\", "-"];
+  const replaceArray = ["\n", "\r", "\t", "\v", "\\", "'", '"', "\?"];
+  const filterArray = ["", "\\\\", "\/\/", "-", "|"];
   const error = document.getElementById("error");
   const result = document.getElementById("result");
 
@@ -53,13 +54,14 @@
     let cmd = document.getElementById("cmd").value;
     cmd = cmd.trim();
 
-    const cmdArray = cmd.replaceAll("\n", " ").split(" ");
+    replaceArray.forEach((r) => (cmd = cmd.replaceAll(r, " ")));
+    const cmdArray = cmd.split(" ");
 
     // filter duplicate items
     const cmdSet = new Set(cmdArray);
 
     const cmdResult = Array.from(cmdSet).filter(
-      (i) => filterMap.indexOf(i) === -1
+      (i) => filterArray.indexOf(i) < 0
     );
     cmdResult.sort();
 
