@@ -88,14 +88,14 @@
       }
       let temp = line + sortResult[i];
       if (temp.length > byChar) {
-        wrapper += line + " " + symbol + "\n";
+        wrapper += line + symbol + "\n";
         line = "";
       }
       line += sortResult[i] + " ";
     }
 
     if (line) {
-      wrapper += line + " " + symbol + "\n";
+      wrapper += line + symbol + "\n";
     }
 
     result.textContent = wrapper;
